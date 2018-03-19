@@ -1,0 +1,22 @@
+{
+  "name": "vados/phalcon-migration-runner",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Vladyslav Pozdnyakov",
+      "email": "scary_donetskiy@live.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.1.0",
+    "ext-phalcon": ">=3.2"
+  },
+  "require-dev": {
+    "phalcon/ide-stubs": "v3.2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Vados\\MigrationRunner\\": "src/"
+    }
+  }
+}

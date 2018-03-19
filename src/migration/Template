@@ -1,0 +1,16 @@
+<?php
+
+use Vados\MigrationRunner\migration\Migration;
+
+class m{{timestamp}}_{{migrationName}} extends Migration
+{
+    public function up()
+    {
+        // TODO: Implement up() method.
+    }
+
+    public function down()
+    {
+        // TODO: Implement down() method.
+    }
+}
