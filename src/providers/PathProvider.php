@@ -27,6 +27,6 @@ class PathProvider
      */
     public static function getConfig(): string
     {
-        return getcwd() . '/config.php';
+        return getcwd() . '/migration_runner.config.php';
     }
 }

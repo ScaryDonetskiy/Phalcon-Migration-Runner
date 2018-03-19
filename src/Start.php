@@ -9,9 +9,11 @@
 namespace Vados\MigrationRunner;
 
 use Vados\MigrationRunner\command\Create;
+use Vados\MigrationRunner\command\GenerateConfigWizard;
 use Vados\MigrationRunner\command\Help;
 use Vados\MigrationRunner\command\Up;
 use Vados\MigrationRunner\enum\Command;
+use Vados\MigrationRunner\providers\PathProvider;
 
 /**
  * Class Start
@@ -29,6 +31,10 @@ class Start
      */
     private $params = [];
 
+    /**
+     * Start constructor.
+     * @param array $argv
+     */
     public function __construct(array $argv)
     {
         $this->command = $argv[1];
@@ -36,6 +42,9 @@ class Start
     }
 
     public function process() {
+        if (!file_exists(PathProvider::getConfig())) {
+            (new GenerateConfigWizard())->run();
+        }
         switch ($this->command) {
             case Command::HELP:
                 (new Help())->run();
