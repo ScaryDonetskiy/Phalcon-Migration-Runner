@@ -8,7 +8,12 @@
 
 namespace Vados\MigrationRunner;
 
+use Phalcon\Db\Adapter\Pdo\Factory;
+use Phalcon\Di;
+use Phalcon\Mvc\Model\Manager;
+use Phalcon\Mvc\Model\MetaData\Memory;
 use Vados\MigrationRunner\command\Create;
+use Vados\MigrationRunner\command\Down;
 use Vados\MigrationRunner\command\GenerateConfigWizard;
 use Vados\MigrationRunner\command\Help;
 use Vados\MigrationRunner\command\Up;
@@ -37,8 +42,18 @@ class Start
      */
     public function __construct(array $argv)
     {
-        $this->command = $argv[1];
+        if (array_key_exists(1, $argv)) {
+            $this->command = $argv[1];
+        } else {
+            $this->command = 'help';
+        }
         $this->params = array_splice($argv, 2);
+        $di = new Di();
+        $di->set('db', function () {
+            return Factory::load(require PathProvider::getConfig());
+        });
+        $di->set('modelsManager', new Manager());
+        $di->set('modelsMetadata', new Memory());
     }
 
     public function process() {
@@ -54,6 +69,9 @@ class Start
                 break;
             case Command::UP:
                 (new Up($this->params))->run();
+                break;
+            case Command::DOWN:
+                (new Down($this->params))->run();
                 break;
         }
     }

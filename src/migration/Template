@@ -4,12 +4,12 @@ use Vados\MigrationRunner\migration\Migration;
 
 class m{{timestamp}}_{{migrationName}} extends Migration
 {
-    public function up()
+    public function up(): bool
     {
         // TODO: Implement up() method.
     }
 
-    public function down()
+    public function down(): bool
     {
         // TODO: Implement down() method.
     }

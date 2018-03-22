@@ -31,27 +31,49 @@ abstract class Migration
 
     /**
      * @param string $action
+     * @return bool
      */
-    private function safeRun(string $action)
+    public function safeRun(string $action): bool
     {
         $this->dbInstance->begin();
         try {
             switch ($action) {
                 default:
                 case 'up':
-                    $this->up();
+                    $result = $this->up();
                     break;
                 case 'down':
-                    $this->down();
+                    $result = $this->down();
                     break;
             }
-            $this->dbInstance->commit();
+            if ($result) {
+                $this->dbInstance->commit();
+            } else {
+                $this->dbInstance->rollback();
+            }
+            return $result;
         } catch (\Exception $e) {
+            echo $e->getMessage() . PHP_EOL;
             $this->dbInstance->rollback();
+            return false;
         }
     }
 
-    abstract public function up();
+    /**
+     * @return AdapterInterface
+     */
+    public function getDbConnection(): AdapterInterface
+    {
+        return $this->dbInstance;
+    }
 
-    abstract public function down();
+    /**
+     * @return bool
+     */
+    abstract public function up(): bool;
+
+    /**
+     * @return bool
+     */
+    abstract public function down(): bool;
 }

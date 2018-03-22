@@ -12,7 +12,7 @@ namespace Vados\MigrationRunner\enum;
  * Class Command
  * @package Vados\MigrationRunner\enum
  */
-final class Command
+abstract class Command
 {
     const HELP = 'help';
     const CREATE = 'create';

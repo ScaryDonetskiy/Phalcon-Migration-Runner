@@ -48,5 +48,6 @@ class GenerateConfigWizard implements ICommand
             $config['dbname'] = 'phalcon';
         }
         file_put_contents(PathProvider::getConfig(), '<?php return ' . var_export($config, true) . ';');
+        echo 'Config generated in ' . PathProvider::getConfig() . PHP_EOL;
     }
 }

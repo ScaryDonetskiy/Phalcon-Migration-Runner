@@ -1,6 +1,7 @@
 {
   "name": "vados/phalcon-migration-runner",
   "type": "library",
+  "license": "BSD-2-Clause",
   "authors": [
     {
       "name": "Vladyslav Pozdnyakov",
@@ -14,6 +15,9 @@
   "require-dev": {
     "phalcon/ide-stubs": "v3.2.1"
   },
+  "bin": [
+    "migration_runner"
+  ],
   "autoload": {
     "psr-4": {
       "Vados\\MigrationRunner\\": "src/"

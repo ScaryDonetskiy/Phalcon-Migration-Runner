@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: vladyslavpozdnyakov
- * Date: 17.03.2018
- * Time: 13:39
+ * Date: 22.03.2018
+ * Time: 20:03
  */
 
 namespace Vados\MigrationRunner\command;
@@ -12,10 +12,10 @@ use Vados\MigrationRunner\models\TblMigration;
 use Vados\MigrationRunner\providers\PathProvider;
 
 /**
- * Class Up
+ * Class Down
  * @package Vados\MigrationRunner\command
  */
-class Up extends MigrationRun implements ICommand
+class Down extends MigrationRun implements ICommand
 {
     /**
      * @var array
@@ -25,35 +25,37 @@ class Up extends MigrationRun implements ICommand
     /**
      * @var int
      */
-    private $runCount = 0;
+    private $runCount;
 
     /**
-     * Up constructor.
+     * Down constructor.
      * @param array $params
      */
     public function __construct(array $params)
     {
         parent::__construct();
         $this->params = $params;
-        if (array_key_exists(0, $params)) {
-            $this->runCount = (int)$params[0];
+        $this->runCount = (int)$params[0];
+        if ($this->runCount) {
+            $this->runCount = 1;
         }
     }
 
     public function run()
     {
-        $migrations = $this->getNewMigrations();
-        if ($this->runCount !== 0) {
-            $migrations = array_slice($migrations, 0, $this->runCount);
-        }
+        $migrations = TblMigration::find([
+            'order' => 'id DESC',
+            'limit' => $this->runCount
+        ]);
         if ($migrations) {
             foreach ($migrations as $migration) {
-                echo $migration . PHP_EOL;
+                /** @var TblMigration $migration */
+                echo $migration->getMigration() . PHP_EOL;
             }
-            if ($this->actionConfirmation('Apply the above migrations?')) {
+            if ($this->actionConfirmation('Revert the above migrations?')) {
                 foreach ($migrations as $migration) {
                     echo "Migration $migration: ";
-                    $result = $this->up($migration);
+                    $result = $this->down($migration);
                     echo $result ? 'true' : 'false';
                     echo PHP_EOL;
                     if (!$result) {
@@ -65,20 +67,18 @@ class Up extends MigrationRun implements ICommand
     }
 
     /**
-     * @param string $migration
+     * @param TblMigration $migration
      * @return bool
      */
-    private function up(string $migration): bool
+    private function down(TblMigration $migration): bool
     {
-        if (file_exists(PathProvider::getMigrationDir() . DIRECTORY_SEPARATOR . $migration)) {
-            require_once PathProvider::getMigrationDir() . DIRECTORY_SEPARATOR . $migration;
-            $migrationClass = substr($migration, 0, -4);
+        if (file_exists(PathProvider::getMigrationDir() . DIRECTORY_SEPARATOR . $migration->getMigration())) {
+            require_once PathProvider::getMigrationDir() . DIRECTORY_SEPARATOR . $migration->getMigration();
+            $migrationClass = substr($migration->getMigration(), 0, -4);
             /** @var Migration $m */
             $m = new $migrationClass();
-            if ($m->safeRun('up')) {
-                $model = new TblMigration();
-                $model->setMigration($migration);
-                $model->save();
+            if ($m->safeRun('down')) {
+                $migration->delete();
                 return true;
             }
         }

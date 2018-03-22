@@ -12,6 +12,8 @@ use Phalcon\Db\AdapterInterface;
 use Phalcon\Db\Column;
 use Vados\MigrationRunner\enum\TableName;
 use Vados\MigrationRunner\migration\DbSingleton;
+use Vados\MigrationRunner\models\TblMigration;
+use Vados\MigrationRunner\providers\PathProvider;
 
 /**
  * Class MigrationRun
@@ -38,17 +40,64 @@ abstract class MigrationRun
         if (!$this->dbInstance->tableExists(TableName::TBL_MIGRATION)) {
             $this->dbInstance->createTable(TableName::TBL_MIGRATION, null, [
                 'columns' => [
-                    new Column('migration', [
-                        'type' => Column::TYPE_TEXT,
+                    new Column('id', [
+                        'type' => Column::TYPE_INTEGER,
                         'primary' => true
+                    ]),
+                    new Column('migration', [
+                        'type' => Column::TYPE_TEXT
                     ])
                 ]
             ]);
         }
     }
 
-    protected function getAppliedMigrations()
+    /**
+     * @return array
+     */
+    protected function getAppliedMigrations(): array
     {
-        $this->dbInstance->query("SELECT migration FROM {TableName::TBL_MIGRATION}");
+        $migrations = [];
+        foreach (TblMigration::find() as $item) {
+            /** @var TblMigration $item */
+            $migrations[] = $item->getMigration();
+        }
+        return $migrations;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getExistingMigrations(): array
+    {
+        $migrations = scandir(PathProvider::getMigrationDir());
+        $ignore = ['.', '..'];
+        return array_filter($migrations, function ($item) use ($ignore) {
+            return !in_array($item, $ignore);
+        });
+    }
+
+    /**
+     * @return array
+     */
+    protected function getNewMigrations(): array
+    {
+        $migrations = array_diff($this->getExistingMigrations(), $this->getAppliedMigrations());
+        sort($migrations);
+        return $migrations;
+    }
+
+    /**
+     * @param string $text
+     * @return bool
+     */
+    protected function actionConfirmation(string $text): bool
+    {
+        echo "$text (yes|no) [yes]: ";
+        $answer = trim(fgets(STDIN));
+        if (!$answer) {
+            $answer = 'yes';
+        }
+        return !strncasecmp($answer, 'y', 1);
     }
 }

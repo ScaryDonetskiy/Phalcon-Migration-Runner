@@ -24,7 +24,7 @@ class Create implements ICommand
     /**
      * @var string
      */
-    private $migrationName;
+    private $migrationName = '';
 
     /**
      * Create constructor.
@@ -33,7 +33,9 @@ class Create implements ICommand
     public function __construct(array $params)
     {
         $this->params = $params;
-        $this->migrationName = $params[0];
+        if (array_key_exists(0, $params)) {
+            $this->migrationName = $params[0];
+        }
     }
 
     public function run()
