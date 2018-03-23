@@ -25,7 +25,7 @@ class Down extends MigrationRun implements ICommand
     /**
      * @var int
      */
-    private $runCount;
+    private $runCount = 1;
 
     /**
      * Down constructor.
@@ -35,9 +35,8 @@ class Down extends MigrationRun implements ICommand
     {
         parent::__construct();
         $this->params = $params;
-        $this->runCount = (int)$params[0];
-        if ($this->runCount) {
-            $this->runCount = 1;
+        if (array_key_exists(0, $params)) {
+            $this->runCount = (int)$params[0];
         }
     }
 
@@ -54,7 +53,7 @@ class Down extends MigrationRun implements ICommand
             }
             if ($this->actionConfirmation('Revert the above migrations?')) {
                 foreach ($migrations as $migration) {
-                    echo "Migration $migration: ";
+                    echo "Migration {$migration->getMigration()}: ";
                     $result = $this->down($migration);
                     echo $result ? 'true' : 'false';
                     echo PHP_EOL;

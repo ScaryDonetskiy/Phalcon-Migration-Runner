@@ -10,8 +10,8 @@ namespace Vados\MigrationRunner\command;
 
 use Phalcon\Db\AdapterInterface;
 use Phalcon\Db\Column;
+use Phalcon\Di;
 use Vados\MigrationRunner\enum\TableName;
-use Vados\MigrationRunner\migration\DbSingleton;
 use Vados\MigrationRunner\models\TblMigration;
 use Vados\MigrationRunner\providers\PathProvider;
 
@@ -31,7 +31,7 @@ abstract class MigrationRun
      */
     protected function __construct()
     {
-        $this->dbInstance = DbSingleton::getInstance();
+        $this->dbInstance = Di::getDefault()->getShared('db');
         $this->checkMigrationTable();
     }
 

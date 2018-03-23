@@ -9,6 +9,7 @@
 namespace Vados\MigrationRunner\migration;
 
 use Phalcon\Db\AdapterInterface;
+use Phalcon\Di;
 
 /**
  * Class Migration
@@ -26,7 +27,7 @@ abstract class Migration
      */
     public function __construct()
     {
-        $this->dbInstance = DbSingleton::getInstance();
+        $this->dbInstance = Di::getDefault()->getShared('db');
     }
 
     /**

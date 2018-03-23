@@ -49,7 +49,7 @@ class Start
         }
         $this->params = array_splice($argv, 2);
         $di = new Di();
-        $di->set('db', function () {
+        $di->setShared('db', function () {
             return Factory::load(require PathProvider::getConfig());
         });
         $di->set('modelsManager', new Manager());
