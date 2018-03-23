@@ -13,14 +13,20 @@
     "ext-phalcon": ">=3.2"
   },
   "require-dev": {
-    "phalcon/ide-stubs": "v3.2.1"
+    "phalcon/ide-stubs": "v3.2.1",
+    "phpunit/phpunit": "^7.0"
   },
   "bin": [
     "migration_runner"
   ],
   "autoload": {
     "psr-4": {
-      "Vados\\MigrationRunner\\": "src/"
+      "Vados\\MigrationRunner\\": "src/",
+      "Vados\\MigrationRunner\\Tests\\": "tests/"
     }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit --bootstrap vendor/autoload.php tests/",
+    "testsCoverage": "vendor/bin/phpunit --bootstrap vendor/autoload.php --coverage-html tests/coverage/ --whitelist src/ tests/"
   }
 }
