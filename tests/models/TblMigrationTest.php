@@ -24,16 +24,6 @@ class TblMigrationTest extends TestCase
 
     public function setUp()
     {
-        $di = Di::getDefault();
-        if ($di === null) {
-            $di = new Di();
-        }
-        $di->setShared('db', function () {
-            return Factory::load(require PathProvider::getConfig());
-        });
-        $di->set('modelsManager', new Manager());
-        $di->set('modelsMetadata', new Memory());
-
         $this->instance = new TblMigration();
     }
 

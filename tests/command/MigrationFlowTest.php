@@ -3,6 +3,7 @@
 namespace Vados\MigrationRunner\Tests\command;
 
 use Phalcon\Db\Adapter\Pdo\Factory;
+use Phalcon\Db\AdapterInterface;
 use Phalcon\Di;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\MetaData\Memory;
@@ -18,39 +19,14 @@ use Vados\MigrationRunner\providers\PathProvider;
  */
 class MigrationFlowTest extends TestCase
 {
-    const DBNAME = 'test.db';
-
     /**
      * @throws \ReflectionException
      */
     public function testFlow()
     {
-        $this->clear();
-        $this->prepareConfig();
-        $this->setDi();
         $this->copyMigration();
         $this->upMigration();
         $this->downMigration();
-        $this->clear();
-    }
-
-    private function prepareConfig()
-    {
-        file_put_contents(PathProvider::getConfig(), '<?php return ' . var_export([
-                'adapter' => 'sqlite',
-                'dbname' => self::DBNAME
-            ], true) . ';');
-    }
-
-    private function setDi()
-    {
-        Di::reset();
-        $di = new Di();
-        $di->setShared('db', function () {
-            return Factory::load(require PathProvider::getConfig());
-        });
-        $di->set('modelsManager', new Manager());
-        $di->set('modelsMetadata', new Memory());
     }
 
     private function copyMigration()
@@ -96,7 +72,7 @@ class MigrationFlowTest extends TestCase
         $this->assertTrue($upMethod->invokeArgs($instance, [$migration]));
     }
 
-    private function clear()
+    public function tearDown()
     {
         if (is_dir(PathProvider::getMigrationDir())) {
             $this->rmDirRecursive(PathProvider::getMigrationDir());
@@ -104,8 +80,8 @@ class MigrationFlowTest extends TestCase
         if (file_exists(PathProvider::getConfig())) {
             unlink(PathProvider::getConfig());
         }
-        if (file_exists(getcwd() . '/' . self::DBNAME)) {
-            unlink(getcwd() . '/' . self::DBNAME);
-        }
+        /** @var AdapterInterface $dbConnection */
+        $dbConnection = Di::getDefault()->getShared('db');
+        $dbConnection->dropTable('tbl_migration');
     }
 }

@@ -26,7 +26,7 @@
     }
   },
   "scripts": {
-    "test": "vendor/bin/phpunit --bootstrap vendor/autoload.php tests/",
-    "testsCoverage": "vendor/bin/phpunit --bootstrap vendor/autoload.php --coverage-html tests/coverage/ --whitelist src/ tests/"
+    "test": "vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/",
+    "testsCoverage": "vendor/bin/phpunit --bootstrap tests/bootstrap.php --coverage-html tests/coverage/ --whitelist src/ tests/"
   }
 }

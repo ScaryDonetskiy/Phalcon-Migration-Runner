@@ -2,16 +2,16 @@
 
 namespace Vados\MigrationRunner\Tests\command;
 
+use PHPUnit\Framework\TestCase;
 use Vados\MigrationRunner\command\Down;
 use Vados\MigrationRunner\command\ICommand;
 use Vados\MigrationRunner\models\TblMigration;
-use Vados\MigrationRunner\Tests\BaseTestCase;
 
 /**
  * Class DownTest
  * @package Vados\MigrationRunner\Tests\command
  */
-class DownTest extends BaseTestCase
+class DownTest extends TestCase
 {
     /**
      * @throws \ReflectionException

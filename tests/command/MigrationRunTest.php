@@ -4,17 +4,17 @@ namespace Vados\MigrationRunner\Tests\command;
 
 use Phalcon\Db\AdapterInterface;
 use Phalcon\Di;
+use PHPUnit\Framework\TestCase;
 use Vados\MigrationRunner\command\MigrationRun;
 use Vados\MigrationRunner\command\Up;
 use Vados\MigrationRunner\models\TblMigration;
 use Vados\MigrationRunner\providers\PathProvider;
-use Vados\MigrationRunner\Tests\BaseTestCase;
 
 /**
  * Class MigrationRunTest
  * @package Vados\MigrationRunner\Tests\command
  */
-class MigrationRunTest extends BaseTestCase
+class MigrationRunTest extends TestCase
 {
     /**
      * @var MigrationRun
@@ -23,7 +23,6 @@ class MigrationRunTest extends BaseTestCase
 
     public function setUp()
     {
-        parent::setUp();
         $this->instance = new Up([]);
     }
 
@@ -74,13 +73,18 @@ class MigrationRunTest extends BaseTestCase
         $result = $getNewMigrations->invoke($this->instance);
         $this->assertInternalType('array', $result);
         $this->assertContains('migration.php', $result);
-        /**
-         * Clear
-         */
-        /** @var AdapterInterface $db */
-        $db = Di::getDefault()->getShared('db');
-        $db->dropTable('tbl_migrations');
-        unlink(PathProvider::getMigrationDir() . '/migration.php');
-        rmdir(PathProvider::getMigrationDir());
+    }
+
+    public function tearDown()
+    {
+        /** @var AdapterInterface $dbConnection */
+        $dbConnection = Di::getDefault()->getShared('db');
+        $dbConnection->dropTable('tbl_migration');
+        if (file_exists(PathProvider::getMigrationDir() . '/migration.php')) {
+            unlink(PathProvider::getMigrationDir() . '/migration.php');
+        }
+        if (is_dir(PathProvider::getMigrationDir())) {
+            rmdir(PathProvider::getMigrationDir());
+        }
     }
 }
