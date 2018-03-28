@@ -1,5 +1,6 @@
 {
   "name": "vados/phalcon-migration-runner",
+  "description": "Easy migration runner for Phalcon framework",
   "type": "library",
   "license": "BSD-2-Clause",
   "authors": [
