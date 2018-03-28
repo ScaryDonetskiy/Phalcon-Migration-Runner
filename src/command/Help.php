@@ -18,10 +18,10 @@ class Help implements ICommand
     {
         $text = <<<HELP
 Available methods:
-    - help
-    - create
-    - up
-    - down
+    - help - Show help information
+    - create {name} - Create new migration
+    - up {runCount=0} - Apply new migrations
+    - down {runCount=1} - Revert some migration
 HELP;
         echo $text . PHP_EOL;
     }
