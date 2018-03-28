@@ -104,3 +104,6 @@ composer require vados/phalcon-migration-runner
 * Writing tests
 * Code review
 * Guidelines accord
+
+
+(c) Vladyslav Pozdnyakov
