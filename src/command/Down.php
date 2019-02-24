@@ -55,6 +55,7 @@ class Down extends MigrationRun implements ICommand
             }
             if ($this->actionConfirmation('Revert the above migrations?')) {
                 foreach ($migrations as $migration) {
+                    /** @var TblMigration $migration */
                     echo "Migration {$migration->getMigration()}: ";
                     $result = $this->down($migration);
                     echo $result ? 'true' : 'false';

@@ -72,7 +72,7 @@ abstract class MigrationRun
     {
         $migrations = scandir(PathProvider::getMigrationDir());
         $ignore = ['.', '..'];
-        return array_filter($migrations, function ($item) use ($ignore) {
+        return array_filter($migrations, function($item) use ($ignore) {
             return !in_array($item, $ignore);
         });
     }
