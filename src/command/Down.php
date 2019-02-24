@@ -10,6 +10,7 @@ namespace Vados\MigrationRunner\command;
 use Vados\MigrationRunner\migration\Migration;
 use Vados\MigrationRunner\models\TblMigration;
 use Vados\MigrationRunner\providers\PathProvider;
+use Phalcon\Mvc\Model\Resultset\Simple;
 
 /**
  * Class Down
@@ -42,11 +43,12 @@ class Down extends MigrationRun implements ICommand
 
     public function run()
     {
+        /** @var Simple $migrations */
         $migrations = TblMigration::find([
             'order' => 'id DESC',
             'limit' => $this->runCount
         ]);
-        if ($migrations) {
+        if ($migrations->count()) {
             foreach ($migrations as $migration) {
                 /** @var TblMigration $migration */
                 echo $migration->getMigration() . PHP_EOL;

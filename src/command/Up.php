@@ -46,7 +46,7 @@ class Up extends MigrationRun implements ICommand
         if ($this->runCount !== 0) {
             $migrations = array_slice($migrations, 0, $this->runCount);
         }
-        if ($migrations) {
+        if (!empty($migrations)) {
             foreach ($migrations as $migration) {
                 echo $migration . PHP_EOL;
             }

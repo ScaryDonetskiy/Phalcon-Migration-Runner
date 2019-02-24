@@ -4,8 +4,8 @@
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/vados/phalcon-migration-runner.svg)]()
 [![Packagist](https://img.shields.io/packagist/dt/vados/phalcon-migration-runner.svg)]()
 ![GitHub Issues](https://img.shields.io/github/issues-raw/ScaryDonetskiy/Phalcon-Migration-Runner.svg)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ScaryDonetskiy/Phalcon-Migration-Runner/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ScaryDonetskiy/ScaryDonetskiy/Phalcon-Migration-Runner/?branch=master)
-[![Travis CI Status](https://travis-ci.org/ScaryDonetskiy/ScaryDonetskiy/Phalcon-Migration-Runner.svg?branch=master)](https://travis-ci.org/ScaryDonetskiy/ScaryDonetskiy/Phalcon-Migration-Runner)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ScaryDonetskiy/Phalcon-Migration-Runner/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ScaryDonetskiy/Phalcon-Migration-Runner/?branch=master)
+[![Travis CI Status](https://travis-ci.org/ScaryDonetskiy/Phalcon-Migration-Runner.svg?branch=master)](https://travis-ci.org/ScaryDonetskiy/Phalcon-Migration-Runner)
 
 Works with PHP 7.1+
 
