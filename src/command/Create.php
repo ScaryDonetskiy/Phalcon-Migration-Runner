@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vladyslavpozdnyakov
- * Date: 17.03.2018
- * Time: 12:58
- */
 
 namespace Vados\MigrationRunner\command;
 
@@ -33,7 +27,7 @@ class Create implements ICommand
     public function __construct(array $params)
     {
         $this->params = $params;
-        if (array_key_exists(0, $params)) {
+        if (isset($params[0])) {
             $this->migrationName = $params[0];
         }
     }

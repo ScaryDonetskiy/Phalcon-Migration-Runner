@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vladyslavpozdnyakov
- * Date: 17.03.2018
- * Time: 14:45
- */
 
 namespace Vados\MigrationRunner\command;
 
@@ -70,6 +64,9 @@ abstract class MigrationRun
      */
     protected function getExistingMigrations(): array
     {
+        if (!is_dir(PathProvider::getMigrationDir())) {
+            return [];
+        }
         $migrations = scandir(PathProvider::getMigrationDir());
         $ignore = ['.', '..'];
         return array_filter($migrations, function($item) use ($ignore) {

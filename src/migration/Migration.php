@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vladyslavpozdnyakov
- * Date: 17.03.2018
- * Time: 13:20
- */
 
 namespace Vados\MigrationRunner\migration;
 
@@ -47,11 +41,7 @@ abstract class Migration
                     $result = $this->down();
                     break;
             }
-            if ($result) {
-                $this->dbInstance->commit();
-            } else {
-                $this->dbInstance->rollback();
-            }
+            $result ? $this->dbInstance->commit() : $this->dbInstance->rollback();
             return $result;
         } catch (\Exception $e) {
             echo $e->getMessage() . PHP_EOL;

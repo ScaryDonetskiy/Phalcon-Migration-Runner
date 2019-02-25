@@ -1,12 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vladyslavpozdnyakov
- * Date: 17.03.2018
- * Time: 13:39
- */
 
 namespace Vados\MigrationRunner\command;
+
+use Vados\MigrationRunner\Helpers;
 use Vados\MigrationRunner\migration\Migration;
 use Vados\MigrationRunner\models\TblMigration;
 use Vados\MigrationRunner\providers\PathProvider;
@@ -35,33 +31,39 @@ class Up extends MigrationRun implements ICommand
     {
         parent::__construct();
         $this->params = $params;
-        if (array_key_exists(0, $params)) {
+        if (isset($params[0])) {
             $this->runCount = (int)$params[0];
         }
     }
 
     public function run()
     {
-        $migrations = $this->getNewMigrations();
-        if ($this->runCount !== 0) {
-            $migrations = array_slice($migrations, 0, $this->runCount);
-        }
+        $migrations = $this->getMigrationsList();
         if (!empty($migrations)) {
-            foreach ($migrations as $migration) {
-                echo $migration . PHP_EOL;
-            }
+            echo implode(PHP_EOL, $migrations);
             if ($this->actionConfirmation('Apply the above migrations?')) {
                 foreach ($migrations as $migration) {
                     echo "Migration $migration: ";
                     $result = $this->up($migration);
-                    echo $result ? 'true' : 'false';
-                    echo PHP_EOL;
+                    echo Helpers::boolToString($result) . PHP_EOL;
                     if (!$result) {
                         break;
                     }
                 }
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    protected function getMigrationsList(): array
+    {
+        $migrations = $this->getNewMigrations();
+        if (0 !== $this->runCount) {
+            $migrations = array_slice($migrations, 0, $this->runCount);
+        }
+        return $migrations;
     }
 
     /**

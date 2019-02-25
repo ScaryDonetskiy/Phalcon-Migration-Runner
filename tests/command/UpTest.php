@@ -5,6 +5,7 @@ namespace Vados\MigrationRunner\Tests\command;
 use PHPUnit\Framework\TestCase;
 use Vados\MigrationRunner\command\ICommand;
 use Vados\MigrationRunner\command\Up;
+use Vados\MigrationRunner\Tests\proxy\Up as UpProxy;
 
 /**
  * Class UpTest
@@ -45,5 +46,12 @@ class UpTest extends TestCase
         $upMethod = new \ReflectionMethod($instance, 'up');
         $upMethod->setAccessible(true);
         $this->assertFalse($upMethod->invokeArgs($instance, ['not_exist']));
+    }
+
+    public function testGetMigrationList()
+    {
+        $instance = new UpProxy([]);
+        $list = $instance->runGetMigrationList();
+        $this->assertIsArray($list);
     }
 }

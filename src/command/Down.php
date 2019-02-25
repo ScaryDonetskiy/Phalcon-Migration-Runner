@@ -1,12 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vladyslavpozdnyakov
- * Date: 22.03.2018
- * Time: 20:03
- */
 
 namespace Vados\MigrationRunner\command;
+
+use Vados\MigrationRunner\Helpers;
 use Vados\MigrationRunner\migration\Migration;
 use Vados\MigrationRunner\models\TblMigration;
 use Vados\MigrationRunner\providers\PathProvider;
@@ -36,7 +32,7 @@ class Down extends MigrationRun implements ICommand
     {
         parent::__construct();
         $this->params = $params;
-        if (array_key_exists(0, $params)) {
+        if (isset($params[0])) {
             $this->runCount = (int)$params[0];
         }
     }
@@ -58,8 +54,7 @@ class Down extends MigrationRun implements ICommand
                     /** @var TblMigration $migration */
                     echo "Migration {$migration->getMigration()}: ";
                     $result = $this->down($migration);
-                    echo $result ? 'true' : 'false';
-                    echo PHP_EOL;
+                    echo Helpers::boolToString($result) . PHP_EOL;
                     if (!$result) {
                         break;
                     }

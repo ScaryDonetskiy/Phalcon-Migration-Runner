@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vladyslavpozdnyakov
- * Date: 17.03.2018
- * Time: 14:19
- */
 
 namespace Vados\MigrationRunner\providers;
 
